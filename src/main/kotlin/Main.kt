@@ -1,7 +1,6 @@
-import utils.AdventOfCode
+import days.day01
 
-suspend fun main(args: Array<String>) {
-    AdventOfCode(day = 1, year = 2023) {
-       println("hello world")
-    }.start()
+
+suspend fun main() {
+    day01()
 }
