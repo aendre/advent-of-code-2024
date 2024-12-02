@@ -17,10 +17,9 @@ val example = """
         val diff = levels[1] - levels[0]
         if (diff==0) return 0
 
-        val sign = diff / abs(diff);
-        val validDiffs = (1..3).map { it*sign}
+        val range = if (diff > 0) 1..3 else -3..-1
         for (index in 1..<levels.count()) {
-            if (!validDiffs.contains(levels[index] - levels[index-1])) return 0
+            if (levels[index] - levels[index-1] !in range) return 0
         }
         return 1
     }
