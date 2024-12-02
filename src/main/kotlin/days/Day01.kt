@@ -13,11 +13,11 @@ val example = """3   4
 3   3""";
 
     AdventOfCode(day = 1, year = 2024) { input ->
-       val (a, b) = input.lines().map {
+       val (first, second) = input.lines().map {
            it.split("   ").map { nr -> nr.toInt()}.toPair()
-       }.unzip()
-       val first = a.sorted();
-       val second = b.sorted();
+       }.unzip().let {
+           it.first.sorted() to it.second.sorted()
+       }
        val diff = first.zip(second).map { abs(it.first - it.second) }
        println("part I  : ${diff.sum()}")
 
@@ -25,7 +25,6 @@ val example = """3   4
            second.count { secondItem -> it == secondItem }
        }
        val part2 = first.indices.sumOf { occurrences[it] * first[it] }
-           .also(::println)
        println("part II : $part2")
     }.start()
 }

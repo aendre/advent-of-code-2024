@@ -9,7 +9,7 @@ import kotlin.system.measureTimeMillis
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
 
-class AdventOfCode(private val day: Int, private val year:Int = 2024, private val solution: (String) -> Unit) {
+class AdventOfCode(private val day: Int, private val year:Int = 2024, private val solution: (String) -> Any) {
 
     private val client = HttpClient(CIO) {
         expectSuccess = true
@@ -21,7 +21,9 @@ class AdventOfCode(private val day: Int, private val year:Int = 2024, private va
     suspend fun start() {
         val input = this.getPuzzleInput();
         val elapsed = measureTimeMillis {
-            solution(input)
+            solution(input).also {
+                println("Solution is: '$it'")
+            }
         }
         val duration = elapsed.toDuration(DurationUnit.MILLISECONDS)
         println("-----------------------------")
