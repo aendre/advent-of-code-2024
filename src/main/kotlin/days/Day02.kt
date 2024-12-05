@@ -24,7 +24,7 @@ val example = """
         return 1
     }
 
-    AdventOfCode(day = 2, year = 2024) { input ->
+    AdventOfCode(day = 2, year = 2024) {
         val reports = input.lines().map { it.split(" ").map { it.toInt() } }
         reports.map { isSafeReport(it) }.sumOf { it } to
 

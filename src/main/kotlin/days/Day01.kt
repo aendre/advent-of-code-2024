@@ -12,7 +12,7 @@ val example = """3   4
 3   9
 3   3""";
 
-    AdventOfCode(day = 1, year = 2024) { input ->
+    AdventOfCode(day = 1, year = 2024) {
        val (first, second) = input.lines().map {
            it.split("   ").map { nr -> nr.toInt()}.toPair()
        }.unzip().let {

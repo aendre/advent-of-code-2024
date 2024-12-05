@@ -4,12 +4,13 @@ import io.ktor.client.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
-import io.ktor.http.*
 import kotlin.system.measureTimeMillis
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
 
-class AdventOfCode(private val day: Int, private val year:Int = 2024, private val solution: (String) -> Any) {
+data class Solution(var input: String, var part1: String = "", var part2: String = "")
+
+class AdventOfCode(private val day: Int, private val year:Int = 2024, private val block: Solution.() -> Unit) {
 
     private val client = HttpClient(CIO) {
         expectSuccess = true
@@ -21,8 +22,9 @@ class AdventOfCode(private val day: Int, private val year:Int = 2024, private va
     suspend fun start() {
         val input = this.getPuzzleInput();
         val elapsed = measureTimeMillis {
-            solution(input).also {
-                println("Solution is: '$it'")
+            Solution(input).apply(block).also {
+                println("Part 1: ${it.part1}")
+                if (it.part2.isNotEmpty()) println("Part 2: ${it.part2}")
             }
         }
         val duration = elapsed.toDuration(DurationUnit.MILLISECONDS)
