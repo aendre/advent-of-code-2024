@@ -8,7 +8,7 @@ import kotlin.system.measureTimeMillis
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
 
-data class Solution(var input: String, var part1: String = "", var part2: String = "")
+data class Solution(var input: String, var part1: Any?, var part2: Any?)
 
 class AdventOfCode(private val day: Int, private val year:Int = 2024, private val block: Solution.() -> Unit) {
 
@@ -22,9 +22,9 @@ class AdventOfCode(private val day: Int, private val year:Int = 2024, private va
     suspend fun start() {
         val input = this.getPuzzleInput();
         val elapsed = measureTimeMillis {
-            Solution(input).apply(block).also {
-                if (it.part1.isNotEmpty()) println("Part 1: ${it.part1}")
-                if (it.part2.isNotEmpty()) println("Part 2: ${it.part2}")
+            Solution(input,null,null).apply(block).also {
+                if (it.part1!=null) println("Part 1: ${it.part1}")
+                if (it.part2!=null) println("Part 2: ${it.part2}")
             }
         }
         val duration = elapsed.toDuration(DurationUnit.MILLISECONDS)

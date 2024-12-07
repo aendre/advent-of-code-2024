@@ -3,18 +3,7 @@ import utils.AdventOfCode
 import utils.CanvasDirection
 import utils.Point2D
 
-private val example = """.M.S......
-..A..MSMS.
-.M.S.MAA..
-..A.ASMSM.
-.M.S.M....
-..........
-S.S.S.S.S.
-.A.A.A.A..
-M.M.M.M.M.
-..........""".trim()
-
-suspend fun day04() = AdventOfCode(day = 4, year = 2024) {
+suspend fun main() = AdventOfCode(day = 4, year = 2024) {
     val matrix = mutableMapOf<Point2D,String>()
     input.lines().forEachIndexed { row, it -> it.chunked(1).forEachIndexed { column, char -> matrix[Point2D(column,row)] = char } }
 
@@ -25,7 +14,7 @@ suspend fun day04() = AdventOfCode(day = 4, year = 2024) {
                 .map { matrix[it] }
                 .joinToString("")
         }.count { it == "XMAS" }
-    }.toString()
+    }
 
     val xMasDirection = listOf(CanvasDirection.RIGHT_DOWN, CanvasDirection.LEFT_UP, CanvasDirection.RIGHT_UP, CanvasDirection.LEFT_DOWN)
     part2 = matrix.entries.sumOf { item ->
@@ -37,7 +26,18 @@ suspend fun day04() = AdventOfCode(day = 4, year = 2024) {
         }.chunked(2)
             .map { it.joinToString("") }
             .all { it == "ASAM" || it == "AMAS" }) 1.toInt() else 0
-    }.toString()
+    }
     //2978 - to high
 
 }.start()
+
+private val example = """.M.S......
+..A..MSMS.
+.M.S.MAA..
+..A.ASMSM.
+.M.S.M....
+..........
+S.S.S.S.S.
+.A.A.A.A..
+M.M.M.M.M.
+..........""".trim()

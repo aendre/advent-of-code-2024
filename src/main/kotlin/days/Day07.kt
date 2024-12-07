@@ -44,16 +44,16 @@ fun calculate(numbers: List<Long>, operators: List<String>): Long {
    return mutableNumbers[0]
 }
 
-suspend fun day07() = AdventOfCode(day = 7, year = 2024) {
+suspend fun main() = AdventOfCode(day = 7, year = 2024) {
    val equations = input.lines()
       .map { it.split(": ").toPair() }
       .map { it.first.toLong() to it.second.split(" ").map { op -> op.toLong()  } }
 
-   fun solve(operators: List<String>): String {
+   fun solve(operators: List<String>): Long {
       return equations.sumOf { pair ->
          val possibleOperators = combineOperators(operators,pair.second.count() - 1)
          if (possibleOperators.any { calculate(pair.second, it) == pair.first }) pair.first else 0
-      }.toString()
+      }
    }
 
    part1 = solve(listOf("*", "+"))
