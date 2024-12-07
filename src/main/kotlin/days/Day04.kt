@@ -1,11 +1,10 @@
 package days
 import utils.AdventOfCode
 import utils.CanvasDirection
-import utils.Point2D
+import utils.toCharMatrix
 
 suspend fun main() = AdventOfCode(day = 4, year = 2024) {
-    val matrix = mutableMapOf<Point2D,String>()
-    input.lines().forEachIndexed { row, it -> it.chunked(1).forEachIndexed { column, char -> matrix[Point2D(column,row)] = char } }
+    val matrix = toCharMatrix(input)
 
     part1 = matrix.entries.sumOf { item ->
         CanvasDirection.entries.map { dir ->

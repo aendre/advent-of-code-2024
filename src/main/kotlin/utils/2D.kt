@@ -17,3 +17,9 @@ enum class CanvasDirection(val value:Point2D) {
     LEFT_UP (CanvasDirection.LEFT.value.stepTo(CanvasDirection.UP.value)),
     LEFT_DOWN (CanvasDirection.LEFT.value.stepTo(CanvasDirection.DOWN.value)),
 }
+
+fun toCharMatrix(input: String): Map<Point2D, String> {
+    val matrix = mutableMapOf<Point2D,String>()
+    input.lines().forEachIndexed { row, it -> it.chunked(1).forEachIndexed { column, char -> matrix[Point2D(column,row)] = char } }
+    return matrix.toMap()
+}
