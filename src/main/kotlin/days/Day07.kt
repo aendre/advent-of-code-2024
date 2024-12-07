@@ -50,10 +50,10 @@ suspend fun day07() = AdventOfCode(day = 7, year = 2024) {
       .map { it.first.toLong() to it.second.split(" ").map { op -> op.toLong()  } }
 
    fun solve(operators: List<String>): String {
-      return equations.filter { pair ->
+      return equations.sumOf { pair ->
          val possibleOperators = combineOperators(operators,pair.second.count() - 1)
-         possibleOperators.map { calculate(pair.second, it) }.count { it == pair.first} > 0
-      }.sumOf { it.first }.toString()
+         if (possibleOperators.any { calculate(pair.second, it) == pair.first }) pair.first else 0
+      }.toString()
    }
 
    part1 = solve(listOf("*", "+"))
