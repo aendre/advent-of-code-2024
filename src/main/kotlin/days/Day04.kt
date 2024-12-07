@@ -36,7 +36,7 @@ suspend fun day04() = AdventOfCode(day = 4, year = 2024) {
                 .joinToString("")
         }.chunked(2)
             .map { it.joinToString("") }
-            .all { it == "ASAM" || it == "AMAS" }) 1L else 0
+            .all { it == "ASAM" || it == "AMAS" }) 1.toInt() else 0
     }.toString()
     //2978 - to high
 

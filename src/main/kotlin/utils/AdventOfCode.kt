@@ -23,7 +23,7 @@ class AdventOfCode(private val day: Int, private val year:Int = 2024, private va
         val input = this.getPuzzleInput();
         val elapsed = measureTimeMillis {
             Solution(input).apply(block).also {
-                println("Part 1: ${it.part1}")
+                if (it.part1.isNotEmpty()) println("Part 1: ${it.part1}")
                 if (it.part2.isNotEmpty()) println("Part 2: ${it.part2}")
             }
         }
