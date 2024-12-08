@@ -1,5 +1,7 @@
 package utils
 
+import java.util.Collections.max
+
 data class Point2D(val x:Int, val y:Int) {
     fun stepTo(dir:Point2D, nrOfSteps: Int = 1): Point2D {
         return Point2D(this.x + dir.x * nrOfSteps, this.y + dir.y * nrOfSteps)
@@ -22,4 +24,16 @@ fun toCharMatrix(input: String): Map<Point2D, String> {
     val matrix = mutableMapOf<Point2D,String>()
     input.lines().forEachIndexed { row, it -> it.chunked(1).forEachIndexed { column, char -> matrix[Point2D(column,row)] = char } }
     return matrix.toMap()
+}
+
+fun printCharMatrix(map:Map<Point2D,String>) {
+    val width = max(map.entries.map { it.key.x })
+    val height = max(map.entries.map { it.key.y })
+    for (y in 0..height) {
+        for (x in 0..width) {
+            print(map.get(Point2D(x,y)))
+        }
+        println()
+    }
+    println("$width x $height")
 }
