@@ -7,15 +7,6 @@ import org.jgrapht.graph.DefaultDirectedGraph
 import org.jgrapht.graph.DefaultEdge
 import utils.*
 
-private val example = """89010123
-78121874
-87430965
-96549874
-45678903
-32019012
-01329801
-10456732""".trim()
-
 suspend fun main() = AdventOfCode(day = 10, year = 2024) {
   val g: Graph<Point2D, DefaultEdge> = DefaultDirectedGraph(DefaultEdge::class.java)
   val dijkstraAlg = DijkstraShortestPath(g)

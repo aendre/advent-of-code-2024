@@ -2,11 +2,9 @@ package days
 
 import utils.AdventOfCode
 
-private const val example = """xmul(2,4)&mul[3,7]!^don't()_mul(5,5)+mul(32,64](mul(11,8)undo()?mul(8,5))"""
-
 suspend fun main() = AdventOfCode(day = 3, year = 2024) {
     part1 = Regex("mul\\(([0-9]{1,3}),([0-9]{1,3})\\)")
-        .findAll(example).map { it.groupValues[1].toInt() to it.groupValues[2].toInt()}
+        .findAll(input).map { it.groupValues[1].toInt() to it.groupValues[2].toInt()}
         .sumOf { it.first * it.second }
 
 

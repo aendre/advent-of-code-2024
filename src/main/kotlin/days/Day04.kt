@@ -29,14 +29,3 @@ suspend fun main() = AdventOfCode(day = 4, year = 2024) {
     //2978 - to high
 
 }.start()
-
-private val example = """.M.S......
-..A..MSMS.
-.M.S.MAA..
-..A.ASMSM.
-.M.S.M....
-..........
-S.S.S.S.S.
-.A.A.A.A..
-M.M.M.M.M.
-..........""".trim()

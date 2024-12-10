@@ -17,10 +17,3 @@ suspend fun main () = AdventOfCode(day = 1, year = 2024) {
    }
    part2 = first.indices.sumOf { occurrences[it] * first[it] }
 }.start()
-
-private val example = """3   4
-4   3
-2   5
-1   3
-3   9
-3   3""";
