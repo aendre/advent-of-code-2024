@@ -26,8 +26,8 @@ fun getAntinodes(map:Map<Point2D, String>, antennas: List<Point2D>): List<Point2
 }
 
 fun getResonantAntinodes(map:Map<Point2D, String>, antennas: List<Point2D>): List<Point2D> {
-   return antennas.map { from ->
-      antennas.toMutableList().apply { remove(from) }.map { to ->
+   return antennas.flatMap { from ->
+      antennas.toMutableList().apply { remove(from) }.flatMap { to ->
          val (diffX, diffY) = (from.x - to.x) to (from.y - to.y)
          var iteration = 1
          var current: Point2D = from.copy()
@@ -38,14 +38,14 @@ fun getResonantAntinodes(map:Map<Point2D, String>, antennas: List<Point2D>): Lis
             iteration += 1
          }
          antinodeSeries
-      }.flatten()
-   }.flatten()
+      }
+   }
 }
 
 suspend fun main() = AdventOfCode(day = 8, year = 2024) {
    val map = toCharMatrix(input)
    val antennas = map.entries.filter { it.value != "." }.groupBy { it.value }
 
-   part1 = antennas.entries.map { getAntinodes(map, it.value.map { it.key }) }.flatten().distinct().count()
-   part2 = antennas.entries.map { getResonantAntinodes(map, it.value.map { it.key }) }.flatten().distinct().count()
+   part1 = antennas.entries.flatMap { getAntinodes(map, it.value.map { it.key }) }.distinct().count()
+   part2 = antennas.entries.flatMap { getResonantAntinodes(map, it.value.map { it.key }) }.distinct().count()
 }.start()
