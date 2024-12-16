@@ -36,9 +36,9 @@ class AdventOfCode(private val day: Int, private val year:Int = 2024, private va
             }
         }
         val duration = elapsed.toDuration(DurationUnit.MILLISECONDS)
-        println("-----------------------------")
-        println("Execution time = $duration")
-        println("Input length   = ${input.lines().count()}")
+        println("-----------------------")
+        println(gray("Execution time = $duration"))
+        println(gray("Input length   = ${input.lines().count()}"))
     }
 
     suspend fun downloadInput(): String {
@@ -76,15 +76,15 @@ class AdventOfCode(private val day: Int, private val year:Int = 2024, private va
     suspend fun getPuzzleInput(): String {
         val input: String
         if (isInputCached) {
-            println("Reading input from cache for Day $day, $year")
+            println(gray("Reading input from cache for Day $day, $year"))
             input = getFileContent(cachedInputFile)
         }
         else {
-            println("Downloading input for Day $day, $year")
+            println(gray("Downloading input for Day $day, $year"))
             input = downloadInput()
             writeContent(cachedInputFile, input)
         }
-        println("----------------------------------------")
+        println("-----------------------------------------")
         return input
     }
 }

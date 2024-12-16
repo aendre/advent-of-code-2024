@@ -1,15 +1,15 @@
 package days
 import utils.AdventOfCode
 import utils.CanvasDirection
-import utils.toCharMatrix
+import utils.toGrid
 
 suspend fun main() = AdventOfCode(day = 4, year = 2024) {
-    val matrix = toCharMatrix(input)
+    val matrix = input.toGrid()
 
     part1 = matrix.entries.sumOf { item ->
         CanvasDirection.entries.map { dir ->
             (0..<4)
-                .map { item.key.stepTo(dir.value, it) }
+                .map { item.key.move(dir, it) }
                 .map { matrix[it] }
                 .joinToString("")
         }.count { it == "XMAS" }
@@ -19,7 +19,7 @@ suspend fun main() = AdventOfCode(day = 4, year = 2024) {
     part2 = matrix.entries.sumOf { item ->
         if (xMasDirection.map { dir ->
             (0..<2)
-                .map { item.key.stepTo(dir.value, it) }
+                .map { item.key.move(dir, it) }
                 .map { matrix[it] }
                 .joinToString("")
         }.chunked(2)

@@ -3,23 +3,15 @@ import utils.*
 
 data class Guard(val pos: Point2D, val direction: CanvasDirection)
 
-fun rotate90(dir: CanvasDirection) = when (dir) {
-    CanvasDirection.UP -> CanvasDirection.RIGHT
-    CanvasDirection.RIGHT -> CanvasDirection.DOWN
-    CanvasDirection.DOWN -> CanvasDirection.LEFT
-    CanvasDirection.LEFT -> CanvasDirection.UP
-    else -> dir
-}
-
-fun step(map:Map<Point2D, String>, guard: Guard): Guard {
-    val nextPosition = guard.pos.stepTo(guard.direction.value);
+fun step(map:Grid, guard: Guard): Guard {
+    val nextPosition = guard.pos.move(guard.direction);
     return when (map.get(nextPosition)) {
-        "#" -> guard.copy(direction = rotate90(guard.direction))
+        "#" -> guard.copy(direction = guard.direction.rotate90())
         else -> guard.copy(pos = nextPosition)
     }
 }
 
-fun isInfiniteMap(map:Map<Point2D, String>, g: Guard): Boolean {
+fun isInfiniteMap(map:Grid, g: Guard): Boolean {
     val tolerance = 1000;
     var guard = g.copy();
     val visited = mutableSetOf(guard.pos)
@@ -41,7 +33,7 @@ fun isInfiniteMap(map:Map<Point2D, String>, g: Guard): Boolean {
     return false
 }
 
-fun solvePart1(map:Map<Point2D, String>, g: Guard): Int {
+fun solvePart1(map:Grid, g: Guard): Int {
     var guard = g.copy();
     val visited = mutableSetOf(guard.pos)
     while (map.get(guard.pos) != null) {
@@ -53,7 +45,7 @@ fun solvePart1(map:Map<Point2D, String>, g: Guard): Int {
 }
 
 suspend fun main() = AdventOfCode(day = 6, year = 2024) {
-    val map = toCharMatrix(input)
+    val map = input.toGrid()
     val guard = Guard(map.filter { it.value == "^" }.entries.first().key, CanvasDirection.UP)
 
     part1 = solvePart1(map,guard)

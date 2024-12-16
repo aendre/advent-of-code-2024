@@ -10,12 +10,12 @@ import utils.*
 suspend fun main() = AdventOfCode(day = 10, year = 2024) {
   val g: Graph<Point2D, DefaultEdge> = DefaultDirectedGraph(DefaultEdge::class.java)
   val dijkstraAlg = DijkstraShortestPath(g)
-  val topologicalMap = toCharMatrix(input)
+  val topologicalMap = input.toGrid()
 
   topologicalMap.entries.forEach { g.addVertex(it.key) }
   topologicalMap.entries.forEach { step ->
-    listOf(CanvasDirection.UP, CanvasDirection.DOWN, CanvasDirection.LEFT, CanvasDirection.RIGHT).forEach {
-      val nextStep = step.key.stepTo(it.value)
+    directions4.forEach {
+      val nextStep = step.key.move(it)
       val valueAtNextStep = topologicalMap.get(nextStep)
       if (valueAtNextStep!=null && valueAtNextStep.toInt()-1==step.value.toInt()) {
         g.addEdge(step.key, nextStep )

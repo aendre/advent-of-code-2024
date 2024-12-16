@@ -1,7 +1,7 @@
 package days
 import utils.*
 
-fun getAntinodes(map:Map<Point2D, String>, antennas: List<Point2D>): List<Point2D> {
+fun getAntinodes(map:Grid, antennas: List<Point2D>): List<Point2D> {
    return antennas.map { from ->
       antennas.toMutableList().apply { remove(from) }.map { to ->
          val (diffX, diffY) = (from.x - to.x) to (from.y - to.y)
@@ -10,7 +10,7 @@ fun getAntinodes(map:Map<Point2D, String>, antennas: List<Point2D>): List<Point2
    }.flatten().filter { map[it]!=null }
 }
 
-fun getResonantAntinodes(map:Map<Point2D, String>, antennas: List<Point2D>): List<Point2D> {
+fun getResonantAntinodes(map:Grid, antennas: List<Point2D>): List<Point2D> {
    return antennas.flatMap { from ->
       antennas.toMutableList().apply { remove(from) }.flatMap { to ->
          val (diffX, diffY) = (from.x - to.x) to (from.y - to.y)
@@ -28,7 +28,7 @@ fun getResonantAntinodes(map:Map<Point2D, String>, antennas: List<Point2D>): Lis
 }
 
 suspend fun main() = AdventOfCode(day = 8, year = 2024) {
-   val map = toCharMatrix(input)
+   val map = input.toGrid()
    val antennas = map.entries.filter { it.value != "." }.groupBy { it.value }
 
    part1 = antennas.entries.flatMap { getAntinodes(map, it.value.map { it.key }) }.distinct().count()
