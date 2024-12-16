@@ -76,6 +76,6 @@ fun String.toGrid(): Grid {
     return matrix.toMap()
 }
 
-fun List<Point2D>.toGrid(content:String = "."): Grid {
+fun List<Point2D>.toGrid(content:String = "█"): Grid {
     return buildMap { this@toGrid.forEach { put(it, content) } }
 }
