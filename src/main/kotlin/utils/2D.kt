@@ -87,3 +87,5 @@ fun String.toCanvasDirection(): CanvasDirection = when (this.lowercase()) {
 fun List<Point2D>.toGrid(content:String = "█"): Grid {
     return buildMap { this@toGrid.forEach { put(it, content) } }
 }
+
+fun Pair<Int,Int>.toPoint2D() = Point2D(this.first,this.second)
