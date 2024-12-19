@@ -76,6 +76,14 @@ fun String.toGrid(): Grid {
     return matrix.toMap()
 }
 
+fun String.toCanvasDirection(): CanvasDirection = when (this.lowercase()) {
+    "v" -> CanvasDirection.DOWN
+    "^" -> CanvasDirection.UP
+    "<" -> CanvasDirection.LEFT
+    ">" -> CanvasDirection.RIGHT
+    else -> CanvasDirection.STAY_STILL
+}
+
 fun List<Point2D>.toGrid(content:String = "█"): Grid {
     return buildMap { this@toGrid.forEach { put(it, content) } }
 }
