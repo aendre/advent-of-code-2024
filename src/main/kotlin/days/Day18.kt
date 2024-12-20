@@ -9,7 +9,7 @@ import utils.*
 val MEMORY_SIZE = 70
 val FIRST_N_BYTES = 1024
 
-fun buildGraph(memoryMap:Grid): Graph<Point2D, DefaultEdge> {
+fun buildMemoryGraph(memoryMap:Grid): Graph<Point2D, DefaultEdge> {
   val g: Graph<Point2D,DefaultEdge> = SimpleDirectedGraph(DefaultEdge::class.java)
   memoryMap.forEach { g.addVertex(it.key)  }
   memoryMap.forEach { current ->
@@ -34,7 +34,7 @@ fun getShortestPathSize(bytePositions: List<Point2D>, takeFirst: Int): Int {
     }
   }.filter { it.value != "#" }
 
-  val dijkstraAlg = DijkstraShortestPath(buildGraph(memoryMap))
+  val dijkstraAlg = DijkstraShortestPath(buildMemoryGraph(memoryMap))
   val paths = dijkstraAlg.getPaths(Point2D(0,0))
   val shortest = paths.getPath(Point2D(MEMORY_SIZE,MEMORY_SIZE))
   return shortest?.edgeList?.size ?: 0

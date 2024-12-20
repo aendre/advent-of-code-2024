@@ -69,6 +69,7 @@ fun Grid.minX() = min(this.entries.map { it.key.x })
 fun Grid.maxX() = max(this.entries.map { it.key.x })
 fun Grid.minY() = min(this.entries.map { it.key.y })
 fun Grid.maxY() = max(this.entries.map { it.key.y })
+fun Grid.getPositionOf(content:String) = this.filter { it.value == content }.map { it.key }.first()
 
 fun String.toGrid(): Grid {
     val matrix = mutableMapOf<Point2D,String>()
