@@ -12,6 +12,8 @@ data class Point2D(val x:Int, val y:Int) {
     }
 }
 
+fun Pair<Int,Int>.toPoint2D() = Point2D(this.first,this.second)
+
 // Define directions on a canvas, where origo (0,0) is in the top left corner
 enum class CanvasDirection(val value:Point2D) {
     UP (Point2D(0,-1)),
@@ -37,6 +39,13 @@ enum class CanvasDirection(val value:Point2D) {
     }
 }
 
+fun String.toCanvasDirection(): CanvasDirection = when (this.lowercase()) {
+    "v" -> CanvasDirection.DOWN
+    "^" -> CanvasDirection.UP
+    "<" -> CanvasDirection.LEFT
+    ">" -> CanvasDirection.RIGHT
+    else -> CanvasDirection.STAY_STILL
+}
 val directions4 = listOf(CanvasDirection.UP, CanvasDirection.DOWN, CanvasDirection.LEFT, CanvasDirection.RIGHT)
 
 typealias Grid = Map<Point2D, String>;
@@ -55,6 +64,22 @@ fun Grid.print(toTerminal:Boolean = true): String {
     val height = this.maxY() - this.minY() + 1
     if (toTerminal)  println(gray("Grid printed. [width=$width height=$height]"))
     return raw
+}
+
+fun Grid.getRows(): List<Grid> {
+    return buildList {
+        for (y in this@getRows.minY()..this@getRows.maxY()){
+            add(this@getRows.filter { it.key.y == y })
+        }
+    }
+}
+
+fun Grid.getColumns(): List<Grid> {
+    return buildList {
+        for (x in this@getColumns.minX()..this@getColumns.maxX()){
+            add(this@getColumns.filter { it.key.x == x })
+        }
+    }
 }
 
 fun Grid.rotate90(): Grid {
@@ -77,16 +102,7 @@ fun String.toGrid(): Grid {
     return matrix.toMap()
 }
 
-fun String.toCanvasDirection(): CanvasDirection = when (this.lowercase()) {
-    "v" -> CanvasDirection.DOWN
-    "^" -> CanvasDirection.UP
-    "<" -> CanvasDirection.LEFT
-    ">" -> CanvasDirection.RIGHT
-    else -> CanvasDirection.STAY_STILL
-}
-
 fun List<Point2D>.toGrid(content:String = "█"): Grid {
     return buildMap { this@toGrid.forEach { put(it, content) } }
 }
 
-fun Pair<Int,Int>.toPoint2D() = Point2D(this.first,this.second)

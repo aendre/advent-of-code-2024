@@ -37,63 +37,30 @@ fun perimeter(region: List<Point2D>) : Long {
   }
 }
 
-fun initializeMovement(region: List<Point2D>): Pair<Point2D,CanvasDirection> {
-  val validPositions = listOf(
-    CanvasDirection.UP to CanvasDirection.RIGHT,
-    CanvasDirection.RIGHT to CanvasDirection.DOWN,
-    CanvasDirection.DOWN to CanvasDirection.LEFT,
-    CanvasDirection.LEFT to CanvasDirection.UP,
-  )
+fun sides(region: List<Point2D>) : Int {
+  fun countRepeatingPositions(region:Grid): Int {
+    val walls = region.getRows().flatMap {
+      it.filter { it.key.move(CanvasDirection.LEFT) !in region }.toList().map { it.first }
+    }
 
-  fun getDirection(region: List<Point2D>, position: Point2D): CanvasDirection {
-    return validPositions.find {
-      position.move(it.first) !in region && position.move(it.second) in region
-    }?.second ?: CanvasDirection.STAY_STILL
+    return walls.toGrid().getColumns().filter { it.isNotEmpty() }.map { columnGrid ->
+     columnGrid.entries.map { it.key }.count {
+        it.move(CanvasDirection.DOWN) !in columnGrid
+      }
+    }.sum()
   }
 
-  val startingPosition = region.find { getDirection(region,it) != CanvasDirection.STAY_STILL } ?: throw Throwable("No valid starting point in region")
-  return startingPosition to getDirection(region,startingPosition)
-}
-
-fun sides(region: List<Point2D>) : Int {
-  if (region.count() == 1) return 4;
-
-  val (initPosition, initDirection) = initializeMovement(region)
-  var nextPosition = initPosition
-  var nextDirection = initDirection
-  var nrOfTurns = 0
-  do {
-//    print(nextPosition)
-    val newPosition = nextPosition.move(nextDirection);
-    if (newPosition !in region) {
-      nextDirection = nextDirection.rotate90()
-      nrOfTurns+=1
-//      print("turning at ${nextPosition}.")
-    }
-    else {
-      nextPosition = newPosition
-    }
-  } while (nextDirection!=initDirection || nextPosition!=initPosition)
-
-  return nrOfTurns
+  val leftSide = region.toGrid()
+  val bottomSide = leftSide.rotate90()
+  val rightSide = bottomSide.rotate90()
+  val topSide = rightSide.rotate90()
+  return countRepeatingPositions(leftSide) + countRepeatingPositions(bottomSide) + countRepeatingPositions(rightSide) + countRepeatingPositions(topSide)
 }
 
 suspend fun main() = AdventOfCode(day = 12, year = 2024) {
-  val example  = """
-AAAA
-BBCD
-BBCC
-EEEC
-""".trimIndent()
-
-  val garden = example.toGrid()
+  val garden = input.toGrid()
   val regions = getRegions(garden)
 
   part1 = regions.sumOf { perimeter(it) * it.count() }
-
-  regions.forEach {
-    val type = garden.get(it[0]) ?: "."
-  }
-
-//  part2 = regions.sumOf { sides(it) * it.count() }
+  part2 = regions.sumOf { sides(it) * it.count()  }
 }.start()
