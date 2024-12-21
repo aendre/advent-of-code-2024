@@ -1,77 +1,48 @@
 package days
 
 import org.jgrapht.Graph
-import org.jgrapht.GraphPath
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath
 import org.jgrapht.graph.DefaultWeightedEdge
 import org.jgrapht.graph.SimpleDirectedWeightedGraph
 import utils.*
 
-typealias RaceGraph = Graph<Point2D, DefaultWeightedEdge>
-
-fun buildGraph(route:Grid): RaceGraph {
+fun buildGraph(route:Grid): Graph<Point2D, DefaultWeightedEdge> {
   val g: Graph<Point2D, DefaultWeightedEdge> = SimpleDirectedWeightedGraph(DefaultWeightedEdge::class.java)
   route.forEach { g.addVertex(it.key) }
   route.forEach { current ->
-    directions4.map { current.key.move(it) }. forEach {
-      if (route.get(it)!=null) g.addEdge(current.key, it)
-    }
+    directions4.map { current.key.move(it) }.filter { it in route}.forEach { g.addEdge(current.key, it) }
   }
-  return g;
+  return g
 }
 
-fun getShortestPath(g:RaceGraph, from: Point2D, to:Point2D): GraphPath<Point2D, DefaultWeightedEdge> {
+fun getShortestPath(route:Grid): List<Point2D> {
+  val g = buildGraph(route)
+  val from = route.getPositionOf("S")
+  val to = route.getPositionOf("E")
+
   val dijkstraAlg = DijkstraShortestPath(g)
-  return dijkstraAlg.getPaths(from).getPath(to) ?: throw Throwable("Cannot find a path")
-}
-
-fun getRoute(g:RaceGraph, path: GraphPath<Point2D, DefaultWeightedEdge>) : List<Point2D> {
+  val path = dijkstraAlg.getPaths(from).getPath(to) ?: throw Throwable("Cannot find a path")
   return path.edgeList.map { g.getEdgeSource(it) } + path.edgeList.map { g.getEdgeTarget(it) }.last()
 }
 
-suspend fun main() = AdventOfCode(day = 20, year = 2024) {
-  val map = example.toGrid();
-  val route = map.filter { it.value != "#" }
-
-  val g = buildGraph(route)
-  val start = route.getPositionOf("S")
-  val end = route.getPositionOf("E")
-  val shortestRouteWithoutCheating = getShortestPath(g,start,end)
-  val shortestAsCoordinates = getRoute(g,shortestRouteWithoutCheating)
-
-  val cheatingRouteSizes = mutableListOf<Double>()
-  shortestAsCoordinates.forEach { current ->
-    directions4.map {
-      val first = current.move(it)
-      val second = first.move(it)
-      if (first !in shortestAsCoordinates && second in shortestAsCoordinates) {
-        val cheatingEdge = g.addEdge(current,second)
-        g.setEdgeWeight(cheatingEdge,2.toDouble())
-        cheatingRouteSizes.add(getShortestPath(g,start,end).weight)
-        g.removeEdge(cheatingEdge)
+fun solve(route:List<Point2D>, allowedDuration: Int): Int {
+  val cheatingRouteSizes = mutableListOf<Int>()
+  route.forEachIndexed { index, position ->
+    for (shortcut in index+1..<route.size) {
+      val distanceOnRoute = shortcut - index;
+      val distanceOnCheat = position.manhattan(route[shortcut])
+      if (distanceOnCheat <= allowedDuration && distanceOnCheat<distanceOnRoute) {
+        cheatingRouteSizes.add(distanceOnRoute-distanceOnCheat)
       }
     }
   }
+  return cheatingRouteSizes.count { it >= 100}
+}
 
-  part1 = cheatingRouteSizes.count { shortestRouteWithoutCheating.weight - it >= 100 }
-  shortestAsCoordinates.toGrid().print()
+suspend fun main() = AdventOfCode(day = 20, year = 2024) {
+  val route = input.toGrid().filter { it.value != "#" }
+  val originalShortestRoute = getShortestPath(route)
 
+  part1 = solve(originalShortestRoute, 2)
+  part2 = solve(originalShortestRoute, 20)
 }.start()
-
-var example = """
-  ###############
-  #...#...#.....#
-  #.#.#.#.#.###.#
-  #S#...#.#.#...#
-  #######.#.#.###
-  #######.#.#...#
-  #######.#.###.#
-  ###..E#...#...#
-  ###.#######.###
-  #...###...#...#
-  #.#####.#.###.#
-  #.#...#.#.#...#
-  #.#.#.#.#.#.###
-  #...#...#...###
-  ###############
-""".trimIndent()

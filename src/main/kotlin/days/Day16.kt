@@ -7,14 +7,13 @@ import org.jgrapht.graph.DefaultWeightedEdge
 import org.jgrapht.graph.SimpleDirectedWeightedGraph
 import utils.*
 
-fun Grid.getPositionFor(content:String) = this.entries.filter { it.value == content }.map { it.key }.first()
 typealias Node = Pair<Point2D,CanvasDirection>
 
 suspend fun main() = AdventOfCode(day = 16, year = 2024) {
   val map = input.toGrid()
   val routes = map.entries.filter { it.value != "#" }.map { it.key }.toGrid()
-  val start = map.getPositionFor("S")
-  val end = map.getPositionFor("E")
+  val start = map.getPositionOf("S")
+  val end = map.getPositionOf("E")
   val g: Graph<Node,DefaultWeightedEdge> = SimpleDirectedWeightedGraph(DefaultWeightedEdge::class.java)
 
   // For each position add a node facing to each of the directions

@@ -2,6 +2,7 @@ package utils
 
 import java.util.Collections.max
 import java.util.Collections.min
+import kotlin.math.abs
 
 data class Point2D(val x:Int, val y:Int) {
     fun move(dir:CanvasDirection, nrOfSteps: Int = 1): Point2D {
@@ -10,7 +11,9 @@ data class Point2D(val x:Int, val y:Int) {
     fun move(amount:Point2D): Point2D {
         return Point2D(this.x + amount.x, this.y + amount.y)
     }
+    fun manhattan(p:Point2D):Int = abs(this.x - p.x) + abs(this.y - p.y)
 }
+
 
 fun Pair<Int,Int>.toPoint2D() = Point2D(this.first,this.second)
 
@@ -36,6 +39,14 @@ enum class CanvasDirection(val value:Point2D) {
         LEFT_DOWN -> LEFT_UP
         LEFT_UP -> RIGHT_UP
         else -> this
+    }
+
+    fun toKeyPress(): String = when(this) {
+        UP -> "^"
+        RIGHT -> ">"
+        DOWN -> "v"
+        LEFT -> "<"
+        else -> throw Throwable("Cannot convert direction to keypress")
     }
 }
 
